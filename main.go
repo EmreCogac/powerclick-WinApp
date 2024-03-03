@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"net"
-	"net/http"
 	"os"
 	"os/exec"
 	"time"
@@ -16,11 +15,13 @@ import (
 func main() {
 
 	r := gin.Default()
+
 	cmd := exec.Command("cmd", "/c", "start", "http://localhost:8080/powerclick/app")
 
 	if err := cmd.Run(); err != nil {
 		panic(err)
 	}
+
 	r.GET("/data/left", left)
 	r.GET("/data/right", right)
 	r.GET("/test", test)
@@ -36,14 +37,13 @@ func main() {
 			break
 		}
 	}
-
 	r.LoadHTMLGlob("templates/*")
-
 	r.GET("/powerclick/app", func(c *gin.Context) {
-		c.HTML(http.StatusOK, "index.tmpl", gin.H{
+		c.HTML(200, "index.tmpl", gin.H{
 			"htmx": "../static/qr.png",
 		})
 	})
+
 	r.Static("/static", "./static")
 
 	r.Run(":8080")
@@ -51,9 +51,11 @@ func main() {
 }
 
 func test(c *gin.Context) {
+
 	c.JSON(200, gin.H{
-		"test ": "basarılı",
+		"test": "test başarılı",
 	})
+
 }
 
 func left(c *gin.Context) {
