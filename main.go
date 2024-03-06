@@ -30,6 +30,7 @@ func main() {
 	for _, addr := range addrs {
 		if ipv4 := addr.To4(); ipv4 != nil {
 			err := qrcode.WriteFile(ipv4.String(), qrcode.High, 500, "./static/qr.png")
+
 			if err != nil {
 				fmt.Println("QR kodu dosyaya yazılamadı:", err)
 				return
