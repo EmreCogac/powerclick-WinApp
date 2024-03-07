@@ -12,6 +12,8 @@ import (
 	"github.com/skip2/go-qrcode"
 )
 
+var ip string
+
 func main() {
 
 	r := gin.Default()
@@ -30,7 +32,7 @@ func main() {
 	for _, addr := range addrs {
 		if ipv4 := addr.To4(); ipv4 != nil {
 			err := qrcode.WriteFile(ipv4.String(), qrcode.High, 500, "./static/qr.png")
-
+			ip = ipv4.String()
 			if err != nil {
 				fmt.Println("QR kodu dosyaya yazılamadı:", err)
 				return
@@ -41,7 +43,8 @@ func main() {
 	r.LoadHTMLGlob("templates/*")
 	r.GET("/powerclick/app", func(c *gin.Context) {
 		c.HTML(200, "index.tmpl", gin.H{
-			"htmx": "../static/qr.png",
+			"htmx":   "../static/qr.png",
+			"ipdata": ip,
 		})
 	})
 
